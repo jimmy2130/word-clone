@@ -3,23 +3,27 @@ import React from 'react';
 function GuessInput() {
 	const [guess, setGuess] = React.useState('');
 
-	function submitAnswer(e) {
-		e.preventDefault();
-		if (guess.length < 5) {
-			window.alert('Please type 5 characters.');
+	function handleSubmit(event) {
+		event.preventDefault();
+		if (guess.length !== 5) {
+			window.alert('Please enter exactly 5 characters. 💖');
 			return;
 		}
 		console.log({ guess });
 		setGuess('');
 	}
 	return (
-		<form className="guess-input-wrapper" onSubmit={submitAnswer}>
+		<form className="guess-input-wrapper" onSubmit={handleSubmit}>
 			<label htmlFor="guess-input">Enter guess:</label>
 			<input
 				id="guess-input"
 				type="text"
 				value={guess}
-				onChange={e => setGuess(e.target.value.toUpperCase())}
+				onChange={event => {
+					const nextGuess = event.target.value.toUpperCase();
+					setGuess(nextGuess);
+				}}
+				minLength={5}
 				maxLength={5}
 				required
 			/>
