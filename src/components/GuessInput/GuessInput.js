@@ -1,6 +1,6 @@
 import React from 'react';
 
-function GuessInput() {
+function GuessInput({ addGuesses }) {
 	const [guess, setGuess] = React.useState('');
 
 	function handleSubmit(event) {
@@ -9,7 +9,7 @@ function GuessInput() {
 			window.alert('Please enter exactly 5 characters. 💖');
 			return;
 		}
-		console.log({ guess });
+		addGuesses(guess);
 		setGuess('');
 	}
 	return (
