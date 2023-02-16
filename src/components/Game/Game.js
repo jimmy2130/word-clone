@@ -4,18 +4,16 @@ import GuessInput from '../GuessInput';
 import Keyboard from '../Keyboard';
 import WonBanner from '../WonBanner';
 import LostBanner from '../LostBanner';
+import RestartButton from '../RestartButton';
 
 import { NUM_OF_GUESSES_ALLOWED } from '../../constants';
 import { sample } from '../../utils';
 import { getKeyboardStatus } from '../../game-helpers';
 import { WORDS } from '../../data';
 
-// Pick a random word on every pageload.
-const answer = sample(WORDS);
-// To make debugging easier, we'll log the solution in the console.
-console.info({ answer });
-
-function Game() {
+function Game({ restartGame }) {
+	const [answer] = React.useState(() => sample(WORDS));
+	console.info({ answer });
 	const [guesses, setGuesses] = React.useState([]);
 	const [gameStatus, setGameStatus] = React.useState('running');
 	const [keyboardStatus, setKeyboardStatus] = React.useState({});
@@ -43,6 +41,7 @@ function Game() {
 			<Keyboard keyboardStatus={keyboardStatus} />
 			{gameStatus === 'won' && <WonBanner numOfGuesses={guesses.length} />}
 			{gameStatus === 'lost' && <LostBanner answer={answer} />}
+			{gameStatus !== 'running' && <RestartButton restartGame={restartGame} />}
 		</>
 	);
 }
