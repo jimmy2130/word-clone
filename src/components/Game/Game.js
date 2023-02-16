@@ -1,7 +1,8 @@
 import React from 'react';
 import GuessResults from '../GuessResults';
 import GuessInput from '../GuessInput';
-import Banner from '../Banner';
+import WonBanner from '../WonBanner';
+import LostBanner from '../LostBanner';
 
 import { NUM_OF_GUESSES_ALLOWED } from '../../constants';
 import { sample } from '../../utils';
@@ -14,12 +15,16 @@ console.info({ answer });
 
 function Game() {
 	const [guesses, setGuesses] = React.useState([]);
-	const isGameOver =
-		guesses.length === NUM_OF_GUESSES_ALLOWED ||
-		guesses[guesses.length - 1] === answer;
+	const [gameStatus, setGameStatus] = React.useState('running');
 
 	function handleSubmitGuess(tentativeGuess) {
-		setGuesses([...guesses, tentativeGuess]);
+		const nextGuesses = [...guesses, tentativeGuess];
+		setGuesses(nextGuesses);
+		if (tentativeGuess === answer) {
+			setGameStatus('won');
+		} else if (nextGuesses.length === NUM_OF_GUESSES_ALLOWED) {
+			setGameStatus('lost');
+		}
 	}
 
 	return (
@@ -27,9 +32,10 @@ function Game() {
 			<GuessResults guesses={guesses} answer={answer} />
 			<GuessInput
 				handleSubmitGuess={handleSubmitGuess}
-				isGameOver={isGameOver}
+				gameStatus={gameStatus}
 			/>
-			<Banner guesses={guesses} answer={answer} />
+			{gameStatus === 'won' && <WonBanner numOfGuesses={guesses.length} />}
+			{gameStatus === 'lost' && <LostBanner answer={answer} />}
 		</>
 	);
 }
