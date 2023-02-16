@@ -1,7 +1,9 @@
 import React from 'react';
 import GuessResults from '../GuessResults';
 import GuessInput from '../GuessInput';
+import Banner from '../Banner';
 
+import { NUM_OF_GUESSES_ALLOWED } from '../../constants';
 import { sample } from '../../utils';
 import { WORDS } from '../../data';
 
@@ -12,6 +14,9 @@ console.info({ answer });
 
 function Game() {
 	const [guesses, setGuesses] = React.useState([]);
+	const isGameOver =
+		guesses.length === NUM_OF_GUESSES_ALLOWED ||
+		guesses[guesses.length - 1] === answer;
 
 	function handleSubmitGuess(tentativeGuess) {
 		setGuesses([...guesses, tentativeGuess]);
@@ -20,7 +25,11 @@ function Game() {
 	return (
 		<>
 			<GuessResults guesses={guesses} answer={answer} />
-			<GuessInput handleSubmitGuess={handleSubmitGuess} />
+			<GuessInput
+				handleSubmitGuess={handleSubmitGuess}
+				isGameOver={isGameOver}
+			/>
+			<Banner guesses={guesses} answer={answer} />
 		</>
 	);
 }
